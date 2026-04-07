@@ -1,0 +1,23 @@
+class Solution {
+    public int characterReplacement(String s, int k) {
+        int[] freq = new int[26];
+        int left = 0, maxFreq = 0, best = 0;
+
+        for (int right = 0; right < s.length(); right++) {
+            // Expand window: include s[right]
+            freq[s.charAt(right) - 'A']++;
+            maxFreq = Math.max(maxFreq, freq[s.charAt(right) - 'A']);
+
+            // If replacements needed > k, shrink from left
+            int windowSize = right - left + 1;
+            if (windowSize - maxFreq > k) {
+                freq[s.charAt(left) - 'A']--;
+                left++;
+            }
+
+            // Window size never shrinks below best — track max
+            best = Math.max(best, right - left + 1);
+        }
+        return best;
+    }
+}
